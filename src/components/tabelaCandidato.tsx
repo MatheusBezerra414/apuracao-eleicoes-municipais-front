@@ -18,13 +18,15 @@ export default function TabelaCandidatos(){
     const [isEditableTable, setisEditableTable] = useState(false)
     const [searchTable, setSearchTable] = useState("")
     const navigate = useNavigate();
+    const [selectedCandidatoId, setSelectedCandidatoId] = useState<string | null>(null);
 
-    const [candidatoid, setCandidatoid] = useState<String>(" ")
+
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
 
-    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>, candidatoId: string) => {
         setAnchorEl(event.currentTarget);
+        setSelectedCandidatoId(candidatoId)
     };
 
     const handleClose = () => {
@@ -35,9 +37,11 @@ export default function TabelaCandidatos(){
         setisEditableTable(!isEditableTable)
     }
 
-    const handleEdit = (candidatoid: string) => {
-    handleClose();
-    navigate(`/edit/${candidatoid}`); // Substitua por sua rota de edição real
+    const handleEdit = () => {
+        if(selectedCandidatoId){
+        handleClose();
+        navigate(`/edit/${selectedCandidatoId}`);
+    }
   };
 
     const rows = 
@@ -73,15 +77,12 @@ export default function TabelaCandidatos(){
                     : <Chip label="Não" color="error" variant="filled" />; }},
         { field: 'more', headerName: '', width: 30, disableColumnMenu: true,
             renderCell: (params) => { 
-                const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-                     handleClick(event);
-                };
                 return  <div>
                             <IconButton
                                 aria-label="mais opções"
                                 aria-controls="long-menu"
                                 aria-haspopup="true"
-                                onClick={(e) => {handleClick(e)}}
+                                onClick={(e) => {handleClick(e, params.row._id)}}
                             >
                                 <MoreVertIcon />
                             </IconButton>
@@ -98,7 +99,7 @@ export default function TabelaCandidatos(){
                                 },
                                 }}
                             >
-                                <MenuItem onClick={ () => handleEdit(params.row._id) }>
+                                <MenuItem onClick={handleEdit}>
                                     <EditIcon style={{ marginRight: 5 }} /> Editar
                                 </MenuItem>
                             </Menu>

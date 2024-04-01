@@ -1,15 +1,15 @@
 import { Container } from "@mui/material";
-import TabelaCandidatos from "../components/tabelaCandidato";
+import { Outlet } from "react-router-dom";
 
 export function PageTabela(){
 
     return(
-
-   
-        <Container>
-            <h1>Lista de Candidatos</h1>
-            <TabelaCandidatos />
-        </Container>
+        <>
+            <Container>
+                <h1 className="App">Lista de Candidatos</h1>
+                <Outlet/>       
+            </Container>
+        </>
     )
 
 }
